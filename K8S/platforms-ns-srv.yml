@@ -1,3 +1,4 @@
+# NodePort config for external communication to K8S cluster
 apiVersion: v1
 kind: Service
 metadata:

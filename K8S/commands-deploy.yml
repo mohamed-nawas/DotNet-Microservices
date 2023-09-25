@@ -1,25 +1,25 @@
-# PlatformService deployment config
+# CommandService deployment config
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: platforms-deploy
+  name: commands-deploy
 spec:
   #Define no of minimum instances to be up
   replicas: 1
-  # Select the defined 'platformservice' template
+  # Select the defined 'commandservice' template
   selector:
     matchLabels:
-      app: platformservice
+      app: commandservice
   # Define pod and container
   template:
     metadata:
       labels:
-        app: platformservice
+        app: commandservice
     spec:
       containers:
-        - name: platformservice
+        - name: commandservice
         # Docker image
-          image: mohamednawaz/platformservice:latest
+          image: mohamednawaz/commandservice:latest
 
 # Cluster IP config
 # Seperate the deployment from the cluster IP config with ---
@@ -27,14 +27,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: platforms-clusterip-srv
+  name: commands-clusterip-srv
 spec:
   type: ClusterIP
   selector:
-  # 'platforms-deploy' app pointer
-    app: platformservice
+  # 'commands-deploy' app pointer
+    app: commandservice
   ports:
-    - name: platformservice
+    - name: commandservice
       protocol: TCP
       port: 80
       targetPort: 80
