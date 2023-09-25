@@ -1,0 +1,29 @@
+#Defines routing for ingress nginx controller to route to our services
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    - host: nawaz-swivel-laptop.com
+      http:
+        paths:
+          # platformservice routing
+          - path: /api/v1/platforms
+            pathType: Prefix
+            backend:
+              service:
+                name: platforms-clusterip-srv
+                port:
+                  number: 80
+          # commandservice routing
+          - path: /api/v1/c/platforms
+            pathType: Prefix
+            backend:
+              service:
+                name: commands-clusterip-srv
+                port:
+                  number: 80
