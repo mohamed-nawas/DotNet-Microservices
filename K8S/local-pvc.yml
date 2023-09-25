@@ -1,0 +1,11 @@
+#Defines Persistent volume claim (PVC) storage for SQL server DB setup
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mssql-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 200Mi
