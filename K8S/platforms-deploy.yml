@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: platforms-deploy
+spec:
+  #Define no of minimum instances to be up
+  replicas: 1
+  # Select the defined 'platformservice' template
+  selector:
+    matchLabels:
+      app: platformservice
+  # Define pod and container
+  template:
+    metadata:
+      labels:
+        app: platformservice
+    spec:
+      containers:
+        - name: platformservice
+        # Docker image
+          image: mohamednawaz/platformservice:latest

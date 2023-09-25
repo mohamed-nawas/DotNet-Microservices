@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: platforms-np-srv
+spec:
+  type: NodePort
+  selector:
+    # 'platforms-deploy' app pointer
+    app: platformservice
+  ports:
+    - name: platformservice
+      protocol: TCP
+      # Define node internal port
+      port: 80
+      # Define target port -> external port of the service to connect to node service
+      targetPort: 80
