@@ -6,8 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
-builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -18,9 +16,22 @@ builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// setup corresponding db server depending on host environment
+if (builder.Environment.IsProduction())
+{
+    Console.WriteLine("Using SQL Server Database");
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("PlatformsConnectionSqlServer")));
+}
+else
+{
+    Console.WriteLine("Using InMemory Database");
+    builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+}
+builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
+
 var app = builder.Build();
 
-// test
+// configuration from host environments
 Console.WriteLine($"Command service endpoint: {app.Configuration["CommandService:BaseUrl"]}");
 
 // Configure the HTTP request pipeline.
@@ -36,6 +47,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-DbSeeder.seedPopulation(app);
+DbSeeder.seedPopulation(app, app.Environment);
 
 app.Run();
